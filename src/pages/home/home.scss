@@ -1,0 +1,16 @@
+.navbar {
+    direction: rtl;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 12px 4px;
+
+    a {
+        text-decoration: none;
+        height: 28px;
+        padding: 4px 12px 4px 10px;
+        border-radius: 999px;
+        background-color: rgba(189, 39, 45, 0.04);
+        line-height: 20px;
+        color: #bd272d;
+    }
+}
