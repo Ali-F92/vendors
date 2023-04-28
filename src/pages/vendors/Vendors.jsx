@@ -63,6 +63,10 @@ export const Vendors = () => {
     return (
       <div className="vendors">
         <UiVirtualScroll
+          buffer={buffer}
+          rowHeight={270}
+          height="100vh"
+          limit={10}
           onPrevCallback={prevCallback}
           onNextCallback={nextCallback}
         >
