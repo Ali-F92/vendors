@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 
 export const UiVirtualScroll = ({
   offset = 0,
-  buffer,
   limit,
   rowHeight,
   height,
@@ -23,38 +22,36 @@ export const UiVirtualScroll = ({
 
     const scrollTop = Math.round(target.scrollTop);
     const clientHeight = Math.round(target.clientHeight);
-    const scrollHeight = Math.round(target.scrollHeight);
-    console.log(scrollTop, clientHeight, scrollHeight);
 
     // defining if we currently scrolling up or down
     const isUp = scrollTop < currentScrollTopPosition;
 
-    if (isUp && scrollTop === 0) {
+    if (isUp && upperBoundary > 0 && scrollTop <= limit * rowHeight) {
       setIsLoading(true);
 
-      await onPrevCallback(upperBoundary - 1);
       setUpperBoundary(upperBoundary - 1);
       setLowerBoundary(lowerBoundary - 1);
+      await onPrevCallback(upperBoundary - 1);
 
       if (overlayRef !== null) {
         const scrollPos = limit * rowHeight;
         overlayRef.current.scrollTo(0, scrollPos);
       }
       setIsLoading(false);
-    } else if (!isUp && scrollTop + clientHeight >= scrollHeight) {
+    } else if (!isUp && scrollTop >= 2 * limit * rowHeight - clientHeight) {
       setIsLoading(true);
 
-      await onNextCallback(lowerBoundary);
       setUpperBoundary(upperBoundary + 1);
       setLowerBoundary(lowerBoundary + 1);
+      await onNextCallback(lowerBoundary + 1);
 
       if (overlayRef !== null) {
         const scrollPos = limit * rowHeight;
-        overlayRef.current.scrollTo(0, scrollPos * 2);
+        overlayRef.current.scrollTo(0, scrollPos - clientHeight);
       }
       setIsLoading(false);
     }
-    setCurrentScrollTopPosition(scrollTop);
+    setCurrentScrollTopPosition(Math.round(target.scrollTop));
   };
 
   return (
