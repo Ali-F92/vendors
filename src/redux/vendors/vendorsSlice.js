@@ -8,7 +8,7 @@ export const vendorsSlice = createSlice({
       state.pageNumber += 1;
     },
     updateList: (state, action) => {
-      state.data.push(...action.payload);
+      state.data = [...action.payload];
     },
   },
 });
